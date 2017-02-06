@@ -1,6 +1,7 @@
 const mocha = require('mocha');
 const config = require('./config');
-const request = require('sync-request');
+const utils = require('./utils');
+const testrail = require('./testrail');
 
 module.exports = TestRailReporter;
 
@@ -10,7 +11,7 @@ function done(config, results, failures) {
     console.log('--- config', config);
     console.log('--- results', results);
 
-    addResultsForCases(results, config);
+    testrail.addResultsForCases(results, config);
 
     console.log('--- Report has been sent to TestRail');
     process.exit(failures);
@@ -19,25 +20,13 @@ function done(config, results, failures) {
   }
 }
 
-function addResultsForCases(results, config) {
-  const url = `https://${config.user}:${config.pass}@webapp20.testrail.net/index.php?/api/v2/add_results_for_cases/${config.runId}`;
-
-  return postRequest(url, results);
-}
-
-function postRequest(url, data) {
-  return request('POST', url, {
-    json: { results: data },
-  });
-}
-
 function TestRailReporter(runner, options) {
   this.done = (failures, exit) => done(this.config, this.results, failures, exit);
 
   const allTests = [];
 
   mocha.reporters.Base.call(this, runner);
-  new mocha.reporters.Spec(runner); // eslint-disable-line
+  new mocha.reporters.Spec(runner);
 
   this.config = (options && options.reporterOptions.testRail) || {};
   this.config = Object.assign({}, this.config, { mapMocha2TestRailStatuses: config.mapMocha2TestRailStatuses });
@@ -48,18 +37,8 @@ function TestRailReporter(runner, options) {
     if (allTests.length < 1) {
       process.exit();
     }
-    this.results = prepareResults(allTests, this.config);
+    this.results = utils.prepareResults(allTests, this.config);
   });
 }
 
-function prepareResults(testResults, config) {
-  return testResults
-    .filter(test => config.mapScenario2Case.hasOwnProperty(test.title))
-    .map(test => {
-      return Object.assign({}, {
-        status_id: config.mapMocha2TestRailStatuses[test.state],
-        elapsed: test.duration * 1000 + "s",
-        case_id: config.mapScenario2Case[test.title],
-      });
-    });
-}
+

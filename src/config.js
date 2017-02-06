@@ -11,6 +11,7 @@
 module.exports.mapMocha2TestRailStatuses = {
   'failed': 5,
   'passed': 1,
+  'skipped': 3,
 };
 
 module.exports.TESTRAIL_TESTRUN_ID = 'TESTRAIL_TESTRUN_ID';
