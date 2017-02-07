@@ -1,5 +1,5 @@
 const mocha = require('mocha');
-const config = require('./config');
+const config = require('./conf');
 const utils = require('./utils');
 const testrail = require('./testrail');
 
@@ -21,24 +21,20 @@ function done(config, results, failures) {
 }
 
 function TestRailReporter(runner, options) {
-  this.done = (failures, exit) => done(this.config, this.results, failures, exit);
+  this.done = (failures, exit) => done(this._config, this.results, failures, exit);
 
   const allTests = [];
 
   mocha.reporters.Base.call(this, runner);
   new mocha.reporters.Spec(runner);
 
-  this.config = (options && options.reporterOptions.testRail) || {};
-  this.config = Object.assign({}, this.config, { mapMocha2TestRailStatuses: config.mapMocha2TestRailStatuses });
-  this.config = Object.assign({}, this.config, { runId: process.env[config.TESTRAIL_TESTRUN_ID] || 0 });
+  this._config = config.conf(this._config, options);
 
   runner.on('test end', (test) => allTests.push(test));
   runner.on('end', () => {
     if (allTests.length < 1) {
       process.exit();
     }
-    this.results = utils.prepareResults(allTests, this.config);
+    this.results = utils.prepareResults(allTests, this._config);
   });
 }
-
-
