@@ -6,16 +6,16 @@ module.exports = TestRailReporter;
 
 function done(config, results, failures) {
   try {
-    console.log('--done');
-    console.log('--- config', config);
-    console.log('--- results', results);
+    console.log('[mocha-testrail-report] --done');
+    console.log('[mocha-testrail-report] --- config', config);
+    console.log('[mocha-testrail-report] --- results', results);
 
     testrail.addResultsForCases(results, config);
 
-    console.log('--- Report has been sent to TestRail');
+    console.log('[mocha-testrail-report] * Report has been sent to TestRail');
     process.exit(failures);
   } catch (e) {
-    console.error(`There is something wrong with mocha-testrail-reporter: ${e.stack}`);
+    console.error(`[mocha-testrail-report] * There is something wrong with mocha-testrail-reporter: ${e.stack}`);
   }
 }
 
