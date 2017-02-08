@@ -1,5 +1,4 @@
 const mocha = require('mocha');
-const config = require('./conf');
 const utils = require('./utils');
 const testrail = require('./testrail');
 
@@ -28,7 +27,7 @@ function TestRailReporter(runner, options) {
   mocha.reporters.Base.call(this, runner);
   new mocha.reporters.Spec(runner);
 
-  this._config = config.conf(this._config, options);
+  this._config = utils.conf(this._config, options);
 
   runner.on('test end', (test) => allTests.push(test));
   runner.on('end', () => {
