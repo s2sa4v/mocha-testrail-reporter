@@ -5,8 +5,8 @@ describe('src/utils', () => {
   describe('#.conf', () => {
     it('should return valid config', () => {
       const config = {
-        user: 'saltsev@klika-tech.com',
-        pass: 'MaxTlL0EEfmD33mUATqQ',
+        user: 'user@domain.com',
+        pass: 'cccsssddd',
         mapScenario2Case: {
           'User logs in with valid credentials': 1,
           'User logs with invalid credentials': 2,
@@ -31,9 +31,9 @@ describe('src/utils', () => {
           "User logs with empty fields": 5,
           "User logs with invalid credentials": 2,
         },
-        "pass": "MaxTlL0EEfmD33mUATqQ",
         "runId": '1',
-        "user": "saltsev@klika-tech.com",
+        "user": "user@domain.com",
+        "pass": "cccsssddd",
       };
 
       expect(utils.conf(config, options)).toEqual(exp);
@@ -66,7 +66,7 @@ describe('src/utils', () => {
         process.env['TESTRAIL_TESTRUN_ID'] = runId;
 
         expect(utils.conf(config, options).runId).toEqual(runId);
-      })
+      });
     });
   });
 });
