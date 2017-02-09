@@ -50,7 +50,9 @@ describe('src/utils', () => {
         };
         process.env['TESTRAIL_TESTRUN_ID'] = runId;
 
-        expect(utils.conf(config, options).runId).toEqual(runId);
+        let conf = utils.conf(config, options);
+
+        expect(conf.runId).toEqual(runId);
       });
 
       it('should overwrite config data with system environment', () => {
@@ -67,6 +69,28 @@ describe('src/utils', () => {
 
         expect(utils.conf(config, options).runId).toEqual(runId);
       });
+    });
+  });
+
+  describe('#.prepareResults', () => {
+    it('should convert results data to testrail fields', () => {
+      const status = "5";
+      const caseId = "32";
+      const config = {
+        mapScenario2Case: { 'test tset': caseId },
+        mapMochaStatuses2Testrail: { failed: status },
+      };
+      const testResults = [
+        {
+          title: 'test tset',
+          duration: '1000',
+          state: 'failed',
+          other: 'other',
+        }
+      ];
+      const exp = [{ status_id: status, elapsed: "1s", case_id: caseId }];
+
+      expect(utils.prepareResults(testResults, config)).toEqual(exp);
     });
   });
 });

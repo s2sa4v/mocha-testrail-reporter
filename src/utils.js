@@ -43,11 +43,16 @@ function createTestRailResult(test, config) {
 
 module.exports.conf = function (config, options) {
   return Object.assign(
-    { mapMochaStatuses2Testrail },
+    config,
+    getStatusesData(),
     getTestRailOptions(options),
     getRunIdData(options),
   );
 };
+
+function getStatusesData() {
+  return { mapMochaStatuses2Testrail };
+}
 
 function getTestRailOptions(options) {
   return (options && options.reporterOptions && options.reporterOptions[OPTIONS_KEY]) || {};
