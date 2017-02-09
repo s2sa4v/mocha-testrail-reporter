@@ -70,6 +70,22 @@ describe('src/utils', () => {
         expect(utils.conf(config, options).runId).toEqual(runId);
       });
     });
+
+    it('should return object event when `conf` is undefined', () => {
+      expect(utils.conf(undefined, {})).toBeA('object');
+    });
+
+    it('should return object even when `conf` is null', () => {
+      expect(utils.conf(null, {})).toBeA('object');
+    });
+
+    it('should return object event when `options` is undefined', () => {
+      expect(utils.conf(undefined, undefined)).toBeA('object');
+    });
+
+    it('should return object even when `options` is null', () => {
+      expect(utils.conf(undefined, null)).toBeA('object');
+    });
   });
 
   describe('#.prepareResults', () => {

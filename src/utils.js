@@ -43,6 +43,7 @@ function createTestRailResult(test, config) {
 
 module.exports.conf = function (config, options) {
   return Object.assign(
+    {},
     config,
     getStatusesData(),
     getTestRailOptions(options),
