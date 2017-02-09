@@ -46,7 +46,7 @@ module.exports.conf = function (config, options) {
     config,
     getStatusesData(),
     getTestRailOptions(options),
-    getRunIdData(options),
+    getRunIdData(options)
   );
 };
 
